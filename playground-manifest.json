@@ -9,7 +9,7 @@
   "servers": [
     "https://oneclicklcaapp.com/lca-orchestration-api",
     "https://oneclicklcaapp.com/results-api",
-    "https://preprod.1clicklca.com/resource-details-api"
+    "https://oneclicklcaapp.com/resource-details-api"
   ],
   "domains": [
     {
@@ -44,7 +44,7 @@
       "path": "/{collection}/_search",
       "domain": "resource-search",
       "servers": [
-        "https://preprod.1clicklca.com/resource-details-api"
+        "https://oneclicklcaapp.com/resource-details-api"
       ],
       "summary": "Call Search API",
       "description": "Get data using Search API. Prefer Search to Multi Search. Use this API if it is possible.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Connection Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
@@ -282,7 +282,7 @@
       "path": "/{collection}/_search",
       "domain": "resource-search",
       "servers": [
-        "https://preprod.1clicklca.com/resource-details-api"
+        "https://oneclicklcaapp.com/resource-details-api"
       ],
       "summary": "Call Multi Search API",
       "description": "Get data using Multi Search API. Use Multi Search:\n* if you need to search separate groups of resources with different search criteria in one request\n* or if GET request cannot be used, e.g., your search criteria is too big.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Connection Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
@@ -528,7 +528,7 @@
       "path": "/{collection}/deactivated",
       "domain": "resource-search",
       "servers": [
-        "https://preprod.1clicklca.com/resource-details-api"
+        "https://oneclicklcaapp.com/resource-details-api"
       ],
       "summary": "Get Deactivated Datasets",
       "description": "Get deactivated datasets using Search API. This endpoint returns only deactivated datasets and supports filtering by deactivateTime. Only metadata (ID + deactivateTime + status) is returned, not full impact data.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Additional Licence Requirement**\nThis endpoint requires the `enableDeactivatedDatasetsMCDAPI` license feature. Users without this license will receive an error response, unless they have admin roles (ROLE_SYSTEM_ADMIN or ROLE_SUPER_USER) which can bypass this requirement.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Connection Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
@@ -766,7 +766,7 @@
       "path": "/resource/{epdId}/epd-file",
       "domain": "epd-files",
       "servers": [
-        "https://preprod.1clicklca.com/resource-details-api"
+        "https://oneclicklcaapp.com/resource-details-api"
       ],
       "summary": "Download EPD file (redirect)",
       "description": "Redirects to a pre-signed S3 URL to start downloading the EPD file in the browser. This endpoint performs license validation and visibility checks before redirecting.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Additional Licence Requirement**\nThis endpoint requires the `enableEPDDownloadMCDAPI` license feature. Users without this license will receive an error response, unless they have admin roles (ROLE_SYSTEM_ADMIN or ROLE_SUPER_USER) which can bypass this requirement.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8006 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Access denied |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_8008 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | EPD file not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n| SEARCHPROXY_9993 | ERROR | TECHNICAL_EXCEPTION | 503 SERVICE_UNAVAILABLE | Service Unavailable |\n",
@@ -937,7 +937,7 @@
       "path": "/epd-files/{epdId}/download-url",
       "domain": "epd-files",
       "servers": [
-        "https://preprod.1clicklca.com/resource-details-api"
+        "https://oneclicklcaapp.com/resource-details-api"
       ],
       "summary": "Get EPD file URL",
       "description": "Returns a JSON payload containing a pre-signed S3 URL for programmatic download of the EPD file. This endpoint performs license validation and visibility checks before returning the URL.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Additional Licence Requirement**\nThis endpoint requires the `enableEPDDownloadMCDAPI` license feature. Users without this license will receive an error response, unless they have admin roles (ROLE_SYSTEM_ADMIN or ROLE_SUPER_USER) which can bypass this requirement.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8006 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Access denied |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_8008 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | EPD file not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n| SEARCHPROXY_9993 | ERROR | TECHNICAL_EXCEPTION | 503 SERVICE_UNAVAILABLE | Service Unavailable |\n",
