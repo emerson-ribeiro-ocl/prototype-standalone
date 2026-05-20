@@ -1,0 +1,2713 @@
+{
+  "version": "1",
+  "generatedAt": "2026-05-19T16:03:41.850Z",
+  "sourceFiles": [
+    "specs/openapi-spec-public-mcd-api.json",
+    "specs/openapi-spec-public-calc-api.json",
+    "specs/openapi-spec-lca-orchestration-api.json"
+  ],
+  "servers": [
+    "https://oneclicklcaapp.com/lca-orchestration-api",
+    "https://oneclicklcaapp.com/results-api",
+    "https://preprod.1clicklca.com/resource-details-api"
+  ],
+  "domains": [
+    {
+      "id": "resource-search",
+      "title": "Resource Search"
+    },
+    {
+      "id": "epd-files",
+      "title": "EPD Files"
+    },
+    {
+      "id": "designs",
+      "title": "Designs"
+    },
+    {
+      "id": "calculation-results",
+      "title": "Calculation Results"
+    },
+    {
+      "id": "projects",
+      "title": "Projects"
+    },
+    {
+      "id": "design-orchestration",
+      "title": "Design Orchestration"
+    }
+  ],
+  "operations": [
+    {
+      "operationId": "_get//{collection}/_search",
+      "method": "GET",
+      "path": "/{collection}/_search",
+      "domain": "resource-search",
+      "servers": [
+        "https://preprod.1clicklca.com/resource-details-api"
+      ],
+      "summary": "Call Search API",
+      "description": "Get data using Search API. Prefer Search to Multi Search. Use this API if it is possible.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Connection Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Resource Search"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "collection",
+          "in": "path",
+          "required": true,
+          "description": "Mandatory field, Collection to search in",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "RESOURCE"
+            ]
+          }
+        },
+        {
+          "name": "X-Real-User-Id",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User ID for analytics and tracking. If not provided, user tracking information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Name",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User name for analytics and tracking. If not provided, user name will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Email",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User email for analytics and tracking. If not provided, user email will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Country",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User country for analytics and tracking. If not provided, user country will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Licence",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User license information for analytics and tracking. If not provided, license information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Project-Code",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Project code for analytics and tracking. If not provided, project code will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Custom-Label",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Custom label for analytics and tracking. If not provided, custom label will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, Page number for pagination. If not provided, default pagination will be used.",
+          "example": 1
+        },
+        {
+          "name": "per_page",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, Number of items per page. If not provided, default page size will be used.",
+          "example": 10
+        },
+        {
+          "name": "queryParams",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, This will hold the input parameters of the request. If not provided, no query parameters will be sent to Typesense, resulting in default search behavior with no filters or search criteria applied.",
+          "schema": {
+            "type": "object",
+            "example": {
+              "q": "*",
+              "query_by": "searchString"
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "facet_counts": [
+              {
+                "field_name": "resourceGroup",
+                "counts": [
+                  {
+                    "value": "BMAT",
+                    "count": 1523
+                  },
+                  {
+                    "value": "EPDMAT",
+                    "count": 891
+                  },
+                  {
+                    "value": "GENMAT",
+                    "count": 412
+                  }
+                ]
+              },
+              {
+                "field_name": "environmentDataSourceStandard",
+                "counts": [
+                  {
+                    "value": "EN15804+A2",
+                    "count": 8740
+                  }
+                ]
+              }
+            ],
+            "found": 187739,
+            "hits": [],
+            "page": 1,
+            "search_cutoff": false,
+            "search_time_ms": 212
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "_post//{collection}/_search",
+      "method": "POST",
+      "path": "/{collection}/_search",
+      "domain": "resource-search",
+      "servers": [
+        "https://preprod.1clicklca.com/resource-details-api"
+      ],
+      "summary": "Call Multi Search API",
+      "description": "Get data using Multi Search API. Use Multi Search:\n* if you need to search separate groups of resources with different search criteria in one request\n* or if GET request cannot be used, e.g., your search criteria is too big.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Connection Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Resource Search"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "collection",
+          "in": "path",
+          "required": true,
+          "description": "Mandatory field, Collection to search in",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "RESOURCE"
+            ]
+          }
+        },
+        {
+          "name": "X-Real-User-Id",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User ID for analytics and tracking. If not provided, user tracking information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Name",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User name for analytics and tracking. If not provided, user name will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Email",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User email for analytics and tracking. If not provided, user email will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Country",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User country for analytics and tracking. If not provided, user country will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Licence",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User license information for analytics and tracking. If not provided, license information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Project-Code",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Project code for analytics and tracking. If not provided, project code will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Custom-Label",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Custom label for analytics and tracking. If not provided, custom label will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "queryParams",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, This will hold the input parameters of the request. If not provided, no query parameters will be sent to Typesense.",
+          "schema": {
+            "type": "object",
+            "example": {
+              "page": "1",
+              "per_page": "30"
+            }
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "contentType": "application/json",
+        "requiredBodyPaths": [],
+        "schema": {
+          "type": "object",
+          "description": "Mandatory field, Request body containing search criteria. Must contain at least one search object in the searches array. If not provided or empty, the request will fail."
+        },
+        "example": {
+          "searches": [
+            {
+              "q": "test",
+              "query_by": "searchString",
+              "filter_by": "resourceGroup:=BMAT"
+            },
+            {
+              "q": "*",
+              "filter_by": "resourceGroup:=EPDMAT"
+            }
+          ]
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Successful response",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "facet_counts": [
+              {
+                "field_name": "resourceGroup",
+                "counts": [
+                  {
+                    "value": "BMAT",
+                    "count": 1523
+                  },
+                  {
+                    "value": "EPDMAT",
+                    "count": 891
+                  },
+                  {
+                    "value": "GENMAT",
+                    "count": 412
+                  }
+                ]
+              },
+              {
+                "field_name": "environmentDataSourceStandard",
+                "counts": [
+                  {
+                    "value": "EN15804+A2",
+                    "count": 8740
+                  }
+                ]
+              }
+            ],
+            "found": 187739,
+            "hits": [],
+            "page": 1,
+            "search_cutoff": false,
+            "search_time_ms": 212
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "/{collection}/deactivated",
+      "method": "GET",
+      "path": "/{collection}/deactivated",
+      "domain": "resource-search",
+      "servers": [
+        "https://preprod.1clicklca.com/resource-details-api"
+      ],
+      "summary": "Get Deactivated Datasets",
+      "description": "Get deactivated datasets using Search API. This endpoint returns only deactivated datasets and supports filtering by deactivateTime. Only metadata (ID + deactivateTime + status) is returned, not full impact data.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Additional Licence Requirement**\nThis endpoint requires the `enableDeactivatedDatasetsMCDAPI` license feature. Users without this license will receive an error response, unless they have admin roles (ROLE_SYSTEM_ADMIN or ROLE_SUPER_USER) which can bypass this requirement.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Connection Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Resource Search"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "collection",
+          "in": "path",
+          "required": true,
+          "description": "Mandatory field, Collection to search in",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "RESOURCE"
+            ]
+          }
+        },
+        {
+          "name": "X-Real-User-Id",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User ID for analytics and tracking. If not provided, user tracking information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Name",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User name for analytics and tracking. If not provided, user name will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Email",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User email for analytics and tracking. If not provided, user email will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Country",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User country for analytics and tracking. If not provided, user country will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Licence",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User license information for analytics and tracking. If not provided, license information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Project-Code",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Project code for analytics and tracking. If not provided, project code will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Custom-Label",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Custom label for analytics and tracking. If not provided, custom label will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, Page number for pagination. If not provided, default pagination will be used.",
+          "example": 1
+        },
+        {
+          "name": "per_page",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, Number of items per page. If not provided, default page size will be used.",
+          "example": 10
+        },
+        {
+          "name": "queryParams",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, This will hold the input parameters of the request. Supports filtering by deactivateTime (e.g., filter_by=deactivateTime:>=2025-11-15 14:03:55). Date strings are automatically converted to epoch timestamps. If not provided, no query parameters will be sent to Typesense, resulting in default search behavior with no filters or search criteria applied.",
+          "schema": {
+            "type": "object",
+            "example": {
+              "q": "*",
+              "filter_by": "deactivateTime:>=2025-11-15 14:03:55"
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful response with deactivated datasets metadata",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "facet_counts": [
+              {
+                "field_name": "resourceGroup",
+                "counts": [
+                  {
+                    "value": "BMAT",
+                    "count": 1523
+                  },
+                  {
+                    "value": "EPDMAT",
+                    "count": 891
+                  },
+                  {
+                    "value": "GENMAT",
+                    "count": 412
+                  }
+                ]
+              },
+              {
+                "field_name": "environmentDataSourceStandard",
+                "counts": [
+                  {
+                    "value": "EN15804+A2",
+                    "count": 8740
+                  }
+                ]
+              }
+            ],
+            "found": 187739,
+            "hits": [],
+            "page": 1,
+            "search_cutoff": false,
+            "search_time_ms": 212
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "/resource/{epdId}/epd-file",
+      "method": "GET",
+      "path": "/resource/{epdId}/epd-file",
+      "domain": "epd-files",
+      "servers": [
+        "https://preprod.1clicklca.com/resource-details-api"
+      ],
+      "summary": "Download EPD file (redirect)",
+      "description": "Redirects to a pre-signed S3 URL to start downloading the EPD file in the browser. This endpoint performs license validation and visibility checks before redirecting.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Additional Licence Requirement**\nThis endpoint requires the `enableEPDDownloadMCDAPI` license feature. Users without this license will receive an error response, unless they have admin roles (ROLE_SYSTEM_ADMIN or ROLE_SUPER_USER) which can bypass this requirement.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8006 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Access denied |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_8008 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | EPD file not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n| SEARCHPROXY_9993 | ERROR | TECHNICAL_EXCEPTION | 503 SERVICE_UNAVAILABLE | Service Unavailable |\n",
+      "tags": [
+        "EPD Files"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "epdId",
+          "in": "path",
+          "required": true,
+          "description": "Mandatory field, OCLID of the EPD resource",
+          "example": "671f2d6b9a45e3b82a4d12f0",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Id",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User ID for analytics and tracking. If not provided, user tracking information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Name",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User name for analytics and tracking. If not provided, user name will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Email",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User email for analytics and tracking. If not provided, user email will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Country",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User country for analytics and tracking. If not provided, user country will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Licence",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User license information for analytics and tracking. If not provided, license information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Project-Code",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Project code for analytics and tracking. If not provided, project code will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Custom-Label",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Custom label for analytics and tracking. If not provided, custom label will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "302": {
+          "description": "Found - Redirect to pre-signed URL"
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "/epd-files/{epdId}/download-url",
+      "method": "GET",
+      "path": "/epd-files/{epdId}/download-url",
+      "domain": "epd-files",
+      "servers": [
+        "https://preprod.1clicklca.com/resource-details-api"
+      ],
+      "summary": "Get EPD file URL",
+      "description": "Returns a JSON payload containing a pre-signed S3 URL for programmatic download of the EPD file. This endpoint performs license validation and visibility checks before returning the URL.\n\n**Role Access**\nAll authenticated users can access this endpoint.\n\n**Licence Requirement**\nThe `externalDataApi` feature must be enabled for the calling user; requests without it will be rejected.\n\n**Additional Licence Requirement**\nThis endpoint requires the `enableEPDDownloadMCDAPI` license feature. Users without this license will receive an error response, unless they have admin roles (ROLE_SYSTEM_ADMIN or ROLE_SUPER_USER) which can bypass this requirement.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| SEARCHPROXY_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| SEARCHPROXY_8007 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | License Feature for External Data API Missing for this user |\n| SEARCHPROXY_9997 | ERROR | TECHNICAL_EXCEPTION | 401 UNAUTHORIZED | Authentication Error |\n| SEARCHPROXY_8002 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| SEARCHPROXY_8006 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Access denied |\n| SEARCHPROXY_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| SEARCHPROXY_8005 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| SEARCHPROXY_8008 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | EPD file not found |\n| SEARCHPROXY_9994 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9995 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Technical Error |\n| SEARCHPROXY_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n| SEARCHPROXY_9993 | ERROR | TECHNICAL_EXCEPTION | 503 SERVICE_UNAVAILABLE | Service Unavailable |\n",
+      "tags": [
+        "EPD Files"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "epdId",
+          "in": "path",
+          "required": true,
+          "description": "Mandatory field, OCLID of the EPD resource",
+          "example": "671f2d6b9a45e3b82a4d12f0",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Id",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User ID for analytics and tracking. If not provided, user tracking information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Name",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User name for analytics and tracking. If not provided, user name will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Email",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User email for analytics and tracking. If not provided, user email will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Country",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User country for analytics and tracking. If not provided, user country will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Real-User-Licence",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, User license information for analytics and tracking. If not provided, license information will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Project-Code",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Project code for analytics and tracking. If not provided, project code will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "X-Custom-Label",
+          "in": "header",
+          "required": false,
+          "description": "Optional field, Custom label for analytics and tracking. If not provided, custom label will not be included in analytics events.",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful response with pre-signed URL",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "id": "671f2d6b9a45e3b82a4d12f0",
+            "signedUrl": "https://oneclicklca-resources.s3.eu-west-1.amazonaws.com/epd-files/671f2d6b9a45e3b82a4d12f0.pdf?X-Amz-Algorithm=...",
+            "expiry": "2025-10-30T12:05:00Z"
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "_get/projects",
+      "method": "GET",
+      "path": "/projects",
+      "domain": "projects",
+      "servers": [
+        "https://oneclicklcaapp.com/results-api"
+      ],
+      "summary": "Get list of Projects with associated designs",
+      "description": "Get list of Projects with associated designs by page for a user who was added as manager,\nmodifier or readonly user. It doesn't return the deleted designs.\n\n**Role Access:** Requires authentication. All authenticated users with any role can access this endpoint.\n\n**Data Access:** Returns only projects where the authenticated user has been added as a manager,\nmodifier, or readonly user. Deleted designs are excluded from the results.\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| RESULTS_8006 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The %s attribute is invalid |\n| RESULTS_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| RESULTS_8007 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | No projects associated with the user were found for the input provided. |\n| RESULTS_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Projects"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "page",
+          "in": "query",
+          "required": true,
+          "description": "Mandatory field, Page Number: 1, 2, 3... If not provided, defaults to 1",
+          "schema": {
+            "type": "integer",
+            "default": 1
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": true,
+          "description": "Mandatory field, Number of Records per Page. If not provided, defaults to value: 20 Maximum value allowed is: 100",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "lastUpdatedAfter",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, Response will contain only projects and designs updated after this date (UTC).If all designs of a project were updated before the date, then no designs will be for the project in the response. Supported Date formats: *yyyy-MM-dd*, *M/d/yy* or *dd.MM.yyyy*. If not provided, all user projects are returned without date filtering.",
+          "schema": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-08-30"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Found the project(s)",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "RESULTS_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "RESULTS_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "projects": [],
+            "pagination": {
+              "currentPage": 1,
+              "amountPerPage": 50,
+              "totalPages": 2,
+              "totalItems": 75
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "_get/projects/projectId/designs/designId/report-urls",
+      "method": "GET",
+      "path": "/projects/{projectId}/designs/{designId}/report-urls",
+      "domain": "projects",
+      "servers": [
+        "https://oneclicklcaapp.com/results-api"
+      ],
+      "summary": "Get report download URLs for a design and tool",
+      "description": "Returns a short-lived pre-signed URL for the **detailed results** Excel report for a single design and tool\n(report-service `POST /reports/with-download-url`).\n\nThe JSON body includes `reports.detailed`. The field `reports.dataSources` is not populated by this implementation and may be null.\n\nOptional query parameters: `useScientificNumberFormat` (default false), `languageId` (default EN).\n\n**Role Access:** Requires authentication. Users must have access to the design or its parent project.\n\n**License Requirement:** Same as calculation results API (`calculationResultsApi`), with admin bypass rules.\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| RESULTS_8006 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The %s attribute is invalid |\n| RESULTS_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the rights to the design provided |\n| RESULTS_8011 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the required license feature |\n| RESULTS_8014 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the rights to the toolId provided |\n| RESULTS_8001 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User not found |\n| RESULTS_8013 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Invalid design id provided |\n| RESULTS_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Error while calling user-management api. |\n| RESULTS_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Projects"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "designId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "toolId",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "useScientificNumberFormat",
+          "in": "query",
+          "required": false,
+          "description": "Scientific number format for Excel reports",
+          "example": false,
+          "schema": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        {
+          "name": "languageId",
+          "in": "query",
+          "required": false,
+          "description": "A report language identity. Used for localized reports.",
+          "example": "EN",
+          "schema": {
+            "type": "string",
+            "example": "EN"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Report URLs for the design",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "RESULTS_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "RESULTS_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "projectId": "",
+            "designId": "",
+            "toolId": "",
+            "reports": {
+              "detailed": {
+                "url": "",
+                "expiresAt": "2025-03-13T12:05:00Z",
+                "contentType": ""
+              },
+              "dataSources": {
+                "url": "",
+                "expiresAt": "2025-03-13T12:05:00Z",
+                "contentType": ""
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "_get/designs/result-summary",
+      "method": "GET",
+      "path": "/designs/{designId}/result-summary",
+      "domain": "designs",
+      "servers": [
+        "https://oneclicklcaapp.com/results-api"
+      ],
+      "summary": "Get design result summary",
+      "description": "Returns the pre-computed result summary for a design: Carbon Hero Benchmark, Life cycle stages breakdown, and Elements (building part) breakdown.\nData is fetched from project-service. All three sections are independently nullable.\n\n**Role Access:** Requires authentication. User must have READ access on the project that owns the design.\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| RESULTS_8006 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The %s attribute is invalid |\n| RESULTS_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the rights to the design provided |\n| RESULTS_8013 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Invalid design id provided |\n| RESULTS_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Designs"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "designId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Result summary; sections may be null when not available",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "RESULTS_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "RESULTS_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "projectId": "507f1f77bcf86cd799439011",
+            "designId": "507f1f77bcf86cd799439012",
+            "embodiedCarbon": {
+              "result": {
+                "value": 565,
+                "unit": "kg CO2e/m2",
+                "grade": "E"
+              },
+              "grade_reference": []
+            },
+            "lifeCycleStageBreakdown": {
+              "stages": []
+            },
+            "buildingPartBreakdown": {
+              "parts": []
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "_get/calculation-results",
+      "method": "GET",
+      "path": "/calculation-results",
+      "domain": "calculation-results",
+      "servers": [
+        "https://oneclicklcaapp.com/results-api"
+      ],
+      "summary": "Get Calculation Results",
+      "description": "Get list of Calculation Results with associated filters for design and tool identifier.\n\n**Role Access:** Requires authentication. All authenticated users with any role can access this endpoint.\n\n**License Requirement:** The API requires the license feature 'calculationResultsApi'.\nUsers with roles 'ROLE_SYSTEM_ADMIN' and 'ROLE_SUPER_USER' can bypass license checks,\nwhile other users must possess an active license for this feature to access the API.\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| RESULTS_8006 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The %s attribute is invalid |\n| RESULTS_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the rights to the design provided |\n| RESULTS_8011 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the required license feature |\n| RESULTS_8014 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the rights to the toolId provided |\n| RESULTS_8009 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | There are no calculation results related to the input provided! |\n| RESULTS_8013 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Invalid design id provided |\n| RESULTS_9996 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Error while calling user-management api. |\n| RESULTS_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Calculation Results"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "designId",
+          "in": "query",
+          "required": true,
+          "description": "Mandatory field, Unique identifier for the design.",
+          "example": "643c13575b614a2bfdbcbb03",
+          "schema": {
+            "type": "string",
+            "example": "643c13575b614a2bfdbcbb03"
+          }
+        },
+        {
+          "name": "toolId",
+          "in": "query",
+          "required": true,
+          "description": "Mandatory field, Identifier for the tool used in the calculation",
+          "example": "flexibleEPDTool",
+          "schema": {
+            "type": "string",
+            "example": "flexibleEPDTool"
+          }
+        },
+        {
+          "name": "showAllCategoriesForTool",
+          "in": "query",
+          "required": false,
+          "description": "Optional field, Flag to show all result categories for the tool. It is taken into account only when toolId is set. By default, result doesn't contain dummy categories (like fullBuildings) that are not shown on the result page. If not provided or set to false, dummy categories are filtered out. If set to true, all categories including dummy categories are returned.",
+          "schema": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Found the calculation results",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "RESULTS_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "RESULTS_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "calculationResults": [],
+            "calculationTotalResults": []
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "_get/calculation-results/dictionary",
+      "method": "GET",
+      "path": "/calculation-results/dictionary",
+      "domain": "calculation-results",
+      "servers": [
+        "https://oneclicklcaapp.com/results-api"
+      ],
+      "summary": "Get all dictionary data",
+      "description": "Get all dictionary data of actual names of tools, categories, and rules found in the design.\n\n**Role Access:** Requires authentication. All authenticated users with any role can access this endpoint.\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| RESULTS_8006 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The %s attribute is invalid |\n| RESULTS_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the rights to the design provided |\n| RESULTS_8012 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | There has been no data found for the given designId. |\n| RESULTS_8013 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Invalid design id provided |\n| RESULTS_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Calculation Results"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "designId",
+          "in": "query",
+          "required": true,
+          "description": "Mandatory field, Unique identifier for the design.",
+          "example": "643c13575b614a2bfdbcbb03",
+          "schema": {
+            "type": "string",
+            "example": "643c13575b614a2bfdbcbb03"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Found the dictionary data",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "RESULTS_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "RESULTS_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "dictionaryData": {
+              "designId": "",
+              "toolData": []
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "RESULTS_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "designs/createDesign",
+      "method": "POST",
+      "path": "/designs",
+      "domain": "design-orchestration",
+      "servers": [
+        "https://oneclicklcaapp.com/lca-orchestration-api"
+      ],
+      "summary": "Create design",
+      "description": "    This will trigger workflow for project/design creation if no validation errors.\n\n    **Roles allowed:** Any authenticated user. Access to the resource (reuse of existing workflow for same customerProjectId) requires the user to own the workflow (same organisation, or same sender for legacy workflows). Roles which can bypass ownership validation (access any customerProjectId): ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n    **Validation:**\n    1. User should be assigned to a license with `epdThroughAPI` license feature.\n    2. Roles which can bypass the license feature validation: ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| LCA_ORCHESTRATION_1001 | INFO | BUSINESS_EXCEPTION | 200 OK | Workflow was successfully created. |\n| LCA_ORCHESTRATION_2001 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow is in progress or not started |\n| LCA_ORCHESTRATION_8008 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8009 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the required license feature |\n| LCA_ORCHESTRATION_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| ROLE_NOT_FOUND | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | User role not found |\n| LCA_ORCHESTRATION_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Design Orchestration"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [],
+      "requestBody": {
+        "required": true,
+        "contentType": "application/json",
+        "requiredBodyPaths": [
+          "importSettings",
+          "importSettings.customerProjectId",
+          "importSettings.reportType",
+          "importSettings.toolId"
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "importSettings": {
+              "type": "object",
+              "properties": {
+                "toolId": {
+                  "type": "string",
+                  "description": "Mandatory field tool ID"
+                },
+                "reportType": {
+                  "type": "string",
+                  "description": "Mandatory field report type"
+                },
+                "customerProjectId": {
+                  "type": "string",
+                  "description": "Mandatory field customer project object ID"
+                },
+                "projectName": {
+                  "type": "string",
+                  "description": "Project name if not provided system will generate project name"
+                },
+                "scopeId": {
+                  "type": "string",
+                  "enum": [
+                    "A13CDScope, E2E_A13CDScope, A14CDScope, E2E_A14CDScope, A15CDScope, E2E_A15CDScope, ACDScope, E2E_ACDScope, AB1CDScope, ABCDScope, A13Scope, E2E_A13Scope, A14Scope, E2E_B6Scope, E2E_A4B6Scope, E2E_A5B6Scope, E2E_A4A5B6Scope, E2E_A4A5B4B6Scope"
+                  ],
+                  "description": "Stages, which needs to be included in calculation. If not provided, created design will not have ScopeToSave"
+                }
+              },
+              "required": [
+                "customerProjectId",
+                "reportType",
+                "toolId"
+              ]
+            },
+            "descriptiveData": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "class": {
+                    "type": "string",
+                    "description": "Mandatory field import mapper mapping rule field name, system will generate dataset for this field."
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Import mapper mapping rule field value, if not provided dataset will not populate with value."
+                  },
+                  "additionalInformation": {
+                    "type": "object",
+                    "description": "additional question information as key-value pairs."
+                  },
+                  "OCLID": {
+                    "type": "string",
+                    "description": "Resource objectId identifier"
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "description": "Quantity value"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Unit of measurement"
+                  }
+                },
+                "required": [
+                  "class"
+                ]
+              }
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "class": {
+                    "type": "string",
+                    "description": "Mandatory field import mapper mapping rule field name, system will generate dataset for this field."
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Import mapper mapping rule field value, if not provided dataset will not populate with value."
+                  },
+                  "additionalInformation": {
+                    "type": "object",
+                    "description": "additional question information as key-value pairs."
+                  },
+                  "OCLID": {
+                    "type": "string",
+                    "description": "Resource objectId identifier"
+                  },
+                  "quantity": {
+                    "type": "string",
+                    "description": "Quantity value"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "description": "Unit of measurement"
+                  }
+                },
+                "required": [
+                  "class"
+                ]
+              }
+            }
+          },
+          "required": [
+            "importSettings"
+          ]
+        },
+        "example": {
+          "importSettings": {
+            "toolId": "simplifiedEPDHub",
+            "reportType": "epdHubToolV2Report",
+            "customerProjectId": "660e54166f8e884da84581a6",
+            "projectName": "My project name",
+            "scopeId": "A13Scope"
+          },
+          "descriptiveData": [
+            {
+              "class": "EPDHUB_PRODUCT_MANUFACTURER_NAME",
+              "content": "String content or Select option value"
+            },
+            {
+              "class": "PRODUCT_UNIT_DECLARED",
+              "content": "1m² of product",
+              "additionalInformation": {
+                "DECLARED QUANTITY": "1",
+                "DECLARED UNIT": "m2"
+              }
+            }
+          ],
+          "data": [
+            {
+              "class": "EPDHUB_PRODUCT_MANUFACTURER_NAME",
+              "additionalInformation": {
+                "MASS_PER_UNIT": "250",
+                "TRANSPORT_LEG1_KM": "20",
+                "TRANSPORT_LEG1_METHOD": "ecoinvent38_241d756d8d6e2c2855ae5f2c063900aa"
+              },
+              "OCLID": "633a7209a2466359afaf6c2e",
+              "quantity": "5",
+              "unit": "kg"
+            }
+          ]
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Response with required data",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "LCA_ORCHESTRATION_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "LCA_ORCHESTRATION_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "workflowId": "64ae7d7e59d51c42000d5a80"
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "designs/downloadProductEPDReport",
+      "method": "GET",
+      "path": "/designs/product-epd-report",
+      "domain": "design-orchestration",
+      "servers": [
+        "https://oneclicklcaapp.com/lca-orchestration-api"
+      ],
+      "summary": "Get Product PDF report",
+      "description": "    Provides file for upload if workflow is completed.\n\n    **Roles allowed:** Any authenticated user. Access requires the user to own the design for the requested customerProjectId (same organisation, or same sender for legacy workflows). Roles which can bypass ownership validation (access any customerProjectId): ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n    **Validation:**\n    1. User should be assigned to a license with `epdThroughAPI` license feature.\n    2. Roles which can bypass the license feature validation: ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| LCA_ORCHESTRATION_1001 | INFO | BUSINESS_EXCEPTION | 200 OK | Workflow was successfully created. |\n| LCA_ORCHESTRATION_2001 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow is in progress or not started |\n| LCA_ORCHESTRATION_2002 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow process failed |\n| LCA_ORCHESTRATION_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| LCA_ORCHESTRATION_8008 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8009 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the required license feature |\n| LCA_ORCHESTRATION_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8006 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Workflow Not Found |\n| LCA_ORCHESTRATION_8007 | ERROR | BUSINESS_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Aws S3 connection issue |\n| LCA_ORCHESTRATION_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Design Orchestration"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "customerProjectId",
+          "in": "query",
+          "required": true,
+          "description": "ID of the project from customer system",
+          "example": "660e54166f8e884da84581a6",
+          "schema": {
+            "type": "string",
+            "default": "project1"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "PDF report file",
+          "contentTypes": [
+            "application/pdf",
+            "application/json"
+          ],
+          "example": ""
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "designs/downloadProductEPDReport_1",
+      "method": "GET",
+      "path": "/designs/product-epd-data",
+      "domain": "design-orchestration",
+      "servers": [
+        "https://oneclicklcaapp.com/lca-orchestration-api"
+      ],
+      "summary": "Get Product EPD data",
+      "description": "    Provides JSON with file for upload (base64) and link to design.\n\n    **Roles allowed:** Any authenticated user. Access requires the user to own the design for the requested customerProjectId (same organisation, or same sender for legacy workflows). Roles which can bypass ownership validation (access any customerProjectId): ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n    **Validation:**\n    1. User should be assigned to a license with `epdThroughAPI` license feature.\n    2. To get iso22057 export info user should be assigned to a license with `ISO22057export` license feature.\n    3. Roles which can bypass the license feature validation: ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| LCA_ORCHESTRATION_1001 | INFO | BUSINESS_EXCEPTION | 200 OK | Workflow was successfully created. |\n| LCA_ORCHESTRATION_2001 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow is in progress or not started |\n| LCA_ORCHESTRATION_2002 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow process failed |\n| LCA_ORCHESTRATION_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| LCA_ORCHESTRATION_8008 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8009 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the required license feature |\n| LCA_ORCHESTRATION_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8006 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Workflow Not Found |\n| LCA_ORCHESTRATION_8007 | ERROR | BUSINESS_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Aws S3 connection issue |\n| LCA_ORCHESTRATION_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Design Orchestration"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "customerProjectId",
+          "in": "query",
+          "required": true,
+          "description": "ID of the project from customer system",
+          "example": "660e54166f8e884da84581a6",
+          "schema": {
+            "type": "string",
+            "default": "project1"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Response with required data",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "LCA_ORCHESTRATION_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "LCA_ORCHESTRATION_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "file": "JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nKVWycrjRhC++yn6HJCmqvcGI5C3kNwmMcxhyCkbhPwJmcu8fmrpltq27D8QDLJUXetXW8OI5uvuHwMGRrDZZI9jjmhCCaNNwXz5dffpG",
+            "designUrl": "https://oneclicklcaapp.com/app/sec/design/results?entityId=6618d478ade3807677d20929&childEntityId=6618d47aade3807677d20931&indicatorId=Preverified_IESPCR131",
+            "iso22057Export": {
+              "subScenarios": [
+                {
+                  "name": "EPD general information",
+                  "subScenariosItems": [
+                    {
+                      "guid": "0pb8bLdMf3SB$4iV$cRvsI",
+                      "name": "data set valid until",
+                      "value": ""
+                    }
+                  ]
+                }
+              ],
+              "subIndicators": [
+                {
+                  "name": "EN 15804: 2012+A1: 2013 LCIA Indicators",
+                  "subIndicatorsItems": [
+                    {
+                      "guid": "03myb0ZQDCDBTBjuxVNgBU",
+                      "name": "abiotic depletion potential for fossil resources",
+                      "values": [
+                        {
+                          "guid": "0ZoVXaJVvEOgEriX0$OK5Q",
+                          "name": "A1",
+                          "unit": "MJ, net calorific value",
+                          "value": 0.033258912597211615
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "designs/downloadProductEPDReport_2",
+      "method": "GET",
+      "path": "/designs/_get-product-epd-data",
+      "domain": "design-orchestration",
+      "servers": [
+        "https://oneclicklcaapp.com/lca-orchestration-api"
+      ],
+      "summary": "Get Product EPD data (Deprecated)",
+      "description": "    Deprecated: Use /product-epd-data instead.\n    Provides JSON with file for upload (base64) and link to design.\n\n    **Roles allowed:** Any authenticated user. Access requires ownership of the design for the requested customerProjectId. Roles which can bypass ownership validation: ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n    **Validation:** 1. User should be assigned to a license with `epdThroughAPI` license feature. 2. To get iso22057 export info user should be assigned to a license with `ISO22057export` license feature. Roles which can bypass the license feature validation: ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| LCA_ORCHESTRATION_1001 | INFO | BUSINESS_EXCEPTION | 200 OK | Workflow was successfully created. |\n| LCA_ORCHESTRATION_2001 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow is in progress or not started |\n| LCA_ORCHESTRATION_2002 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow process failed |\n| LCA_ORCHESTRATION_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| LCA_ORCHESTRATION_8008 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8009 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the required license feature |\n| LCA_ORCHESTRATION_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8006 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Workflow Not Found |\n| LCA_ORCHESTRATION_8007 | ERROR | BUSINESS_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Aws S3 connection issue |\n| LCA_ORCHESTRATION_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Design Orchestration"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "customerProjectId",
+          "in": "query",
+          "required": true,
+          "description": "ID of the project from customer system",
+          "example": "660e54166f8e884da84581a6",
+          "schema": {
+            "type": "string",
+            "default": "project1"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Response with required data",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "warning": [
+              {
+                "code": "LCA_ORCHESTRATION_2001",
+                "level": "WARNING",
+                "message": "Validation failed for some attributes",
+                "description": ""
+              }
+            ],
+            "info": [
+              {
+                "code": "LCA_ORCHESTRATION_1001",
+                "level": "INFO",
+                "message": "Operation completed successfully",
+                "description": ""
+              }
+            ],
+            "file": "JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nKVWycrjRhC++yn6HJCmqvcGI5C3kNwmMcxhyCkbhPwJmcu8fmrpltq27D8QDLJUXetXW8OI5uvuHwMGRrDZZI9jjmhCCaNNwXz5dffpG",
+            "designUrl": "https://oneclicklcaapp.com/app/sec/design/results?entityId=6618d478ade3807677d20929&childEntityId=6618d47aade3807677d20931&indicatorId=Preverified_IESPCR131",
+            "iso22057Export": {
+              "subScenarios": [
+                {
+                  "name": "EPD general information",
+                  "subScenariosItems": [
+                    {
+                      "guid": "0pb8bLdMf3SB$4iV$cRvsI",
+                      "name": "data set valid until",
+                      "value": ""
+                    }
+                  ]
+                }
+              ],
+              "subIndicators": [
+                {
+                  "name": "EN 15804: 2012+A1: 2013 LCIA Indicators",
+                  "subIndicatorsItems": [
+                    {
+                      "guid": "03myb0ZQDCDBTBjuxVNgBU",
+                      "name": "abiotic depletion potential for fossil resources",
+                      "values": [
+                        {
+                          "guid": "0ZoVXaJVvEOgEriX0$OK5Q",
+                          "name": "A1",
+                          "unit": "MJ, net calorific value",
+                          "value": 0.033258912597211615
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "operationId": "designs/downloadProductEPDReport_3",
+      "method": "GET",
+      "path": "/designs/_download-product-epd-report",
+      "domain": "design-orchestration",
+      "servers": [
+        "https://oneclicklcaapp.com/lca-orchestration-api"
+      ],
+      "summary": "Get Product PDF report (Deprecated)",
+      "description": "    Deprecated: Use /product-epd-report instead.\n    Provides file for upload if workflow is completed.\n\n    **Roles allowed:** Any authenticated user. Access requires ownership of the design for the requested customerProjectId. Roles which can bypass ownership validation: ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n    **Validation:** User should be assigned to a license with `epdThroughAPI` license feature. Roles which can bypass the license feature validation: ROLE_SYSTEM_ADMIN, ROLE_SUPER_USER, ROLE_DATA_MGR, ROLE_DEVELOPER.\n\n\n| Code | Level | Type | HttpStatus | Sanitized Message |\n|------|-------|------|------------|-------------------|\n| LCA_ORCHESTRATION_1001 | INFO | BUSINESS_EXCEPTION | 200 OK | Workflow was successfully created. |\n| LCA_ORCHESTRATION_2001 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow is in progress or not started |\n| LCA_ORCHESTRATION_2002 | WARNING | BUSINESS_EXCEPTION | 200 OK | Workflow process failed |\n| LCA_ORCHESTRATION_8004 | ERROR | BUSINESS_EXCEPTION | 400 BAD_REQUEST | The attribute is invalid: %s |\n| LCA_ORCHESTRATION_8008 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8009 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | User does not have the required license feature |\n| LCA_ORCHESTRATION_8010 | ERROR | BUSINESS_EXCEPTION | 403 FORBIDDEN | Insufficient rights |\n| LCA_ORCHESTRATION_8006 | ERROR | BUSINESS_EXCEPTION | 404 NOT_FOUND | Workflow Not Found |\n| LCA_ORCHESTRATION_8007 | ERROR | BUSINESS_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Aws S3 connection issue |\n| LCA_ORCHESTRATION_9999 | ERROR | TECHNICAL_EXCEPTION | 500 INTERNAL_SERVER_ERROR | Unknown Technical Error |\n",
+      "tags": [
+        "Design Orchestration"
+      ],
+      "secured": true,
+      "requiresBearer": true,
+      "securitySchemes": [
+        {
+          "key": "bearer-token",
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "customerProjectId",
+          "in": "query",
+          "required": true,
+          "description": "ID of the project from customer system",
+          "example": "660e54166f8e884da84581a6",
+          "schema": {
+            "type": "string",
+            "default": "project1"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "PDF report file",
+          "contentTypes": [
+            "application/pdf"
+          ],
+          "example": ""
+        },
+        "400": {
+          "description": "Bad Request. The request sent to the server is invalid or corrupted. The request parameters could be malformed or HTTP headers could be invalid.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8006",
+                "level": "ERROR",
+                "message": "Some attribute is invalid",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The access token in the request is invalid."
+        },
+        "403": {
+          "description": "Forbidden. You do not have permission to access the resource.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8003",
+                "level": "ERROR",
+                "message": "You don't have access to the requested resource",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "404": {
+          "description": "Resource not found. The requested resource is not found.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_8004",
+                "level": "ERROR",
+                "message": "Resource not found",
+                "description": ""
+              }
+            ]
+          }
+        },
+        "500": {
+          "description": "Internal Server Error. The server encountered an unexpected condition.",
+          "contentTypes": [
+            "application/json"
+          ],
+          "example": {
+            "error": [
+              {
+                "code": "LCA_ORCHESTRATION_9999",
+                "level": "ERROR",
+                "message": "Some technical exception occurred",
+                "description": "Server is unable to process the request due to XYZ"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
